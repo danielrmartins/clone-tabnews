@@ -1,5 +1,5 @@
 function Home() {
-  return <h1>Guaxinim do bundão 🦝</h1>
+  return <h1>Run Forrest, Run! 🦝</h1>
 }
 
 export default Home;
