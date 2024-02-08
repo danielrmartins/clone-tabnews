@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "br.com.netshoes.app",
+      "sha256_cert_fingerprints": [
+        "D9:45:66:DF:97:3F:D8:1C:FA:91:EC:C8:D8:FA:D6:87:1D:41:51:FD:E8:C8:65:EC:78:CE:8C:81:A5:E5:10:77"
+      ]
+    }
+  }
+]
