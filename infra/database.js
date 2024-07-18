@@ -1,11 +1,11 @@
-import { Client } from 'pg'
+import { Client } from "pg";
 
-async function query (queryObject, params = []) {
+async function query(queryObject, params = []) {
   let client;
 
   try {
     client = await getNewClient();
-    const result = await client.query(queryObject);  
+    const result = await client.query(queryObject);
     return result;
   } catch (error) {
     console.error(error);
@@ -38,5 +38,5 @@ function getSSLValues() {
   //   };
   // }
 
-  return process.env.NODE_ENV === 'production' ? true : false;
+  return process.env.NODE_ENV === "production" ? true : false;
 }
