@@ -1,6 +1,6 @@
 import { Client } from "pg";
 
-async function query(queryObject, params = []) {
+async function query(queryObject) {
   let client;
 
   try {
@@ -28,8 +28,12 @@ async function getNewClient() {
   await client.connect();
   return client;
 }
+const database = {
+  query,
+  getNewClient,
+};
 
-export default { query, getNewClient };
+export default database;
 
 function getSSLValues() {
   // if (process.env.POSTGRES_CA !== undefined) {
