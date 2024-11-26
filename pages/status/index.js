@@ -21,22 +21,27 @@ function UpdatedAt() {
     refreshInterval: 2000,
   });
 
-  const {
-    dependencies: { database },
-  } = data;
-
-  let updatedAt = "Carregando...";
-
-  if (!isLoading && data) {
-    updatedAt = new Date(data.updated_at).toLocaleString("pt-BR");
-  }
-
   return (
     <div>
-      <p>Última atualização: {updatedAt}</p>
-      <p>Versão Postgres: {database.version} </p>
-      <p>Quantidades de conexões máximas: {database.open_connections} </p>
-      <p>Quantidades de conexões ativas: {database.max_connections}</p>
+      {isLoading ? (
+        <p>Carregando...</p>
+      ) : (
+        <>
+          <p>
+            Última atualização:{" "}
+            {new Date(data.updated_at).toLocaleString("pt-BR")}
+          </p>
+          <p>Versão Postgres: {data.dependencies.database.version} </p>
+          <p>
+            Quantidades de conexões máximas:{" "}
+            {data.dependencies.database.open_connections}{" "}
+          </p>
+          <p>
+            Quantidades de conexões ativas:{" "}
+            {data.dependencies.database.max_connections}
+          </p>
+        </>
+      )}
     </div>
   );
 }
