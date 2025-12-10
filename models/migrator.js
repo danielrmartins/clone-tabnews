@@ -3,7 +3,6 @@ import { resolve } from "node:path";
 import database from "infra/database.js";
 
 const defaultMigrationsOptions = {
-  databaseUrl: process.env.DATABASE_URL,
   dryRun: true,
   dir: resolve("infra", "migrations"),
   direction: "up",
