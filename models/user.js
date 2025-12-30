@@ -232,12 +232,39 @@ async function hashPasswordInObject(userInputValues) {
   userInputValues.password = hashedPassword;
 }
 
+async function setFeatures(userId, featuresArray) {
+  const updatedUser = await runUpdateQuery(userId, featuresArray);
+
+  return updatedUser;
+
+  async function runUpdateQuery(userId, featuresArray) {
+    const results = await database.query({
+      text: `
+        UPDATE 
+          users 
+        SET 
+          features = $2,
+          updated_at = timezone('utc', now())
+        WHERE 
+          id = $1
+        RETURNING 
+          *
+      ;`,
+
+      values: [userId, featuresArray],
+    });
+
+    return results.rows[0];
+  }
+}
+
 const user = {
   create,
   findOneByUsername,
   findOneById,
   update,
   findOneByEmail,
+  setFeatures,
 };
 
 export default user;
