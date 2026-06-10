@@ -39,6 +39,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       });
     });
   });
+
   describe("Default user", () => {
     test("With nonexistent 'username'", async () => {
       const createdUser = await orchestrator.createUser();
@@ -124,7 +125,8 @@ describe("PATCH /api/v1/users/[username]", () => {
       expect(responseBody).toEqual({
         name: "ForbiddenError",
         message: "Você não possui permissão para atualizar outro usuário.",
-        action: "Verifique se você possui a feature necessária para atualizar outro usuário.",
+        action:
+          "Verifique se você possui a feature necessária para atualizar outro usuário.",
         status_code: 403,
       });
     });
@@ -304,6 +306,51 @@ describe("PATCH /api/v1/users/[username]", () => {
 
       expect(correctPasswordMatch).toBe(true);
       expect(incorrectPasswordMatch).toBe(false);
+    });
+  });
+
+  describe("Privileged user", () => {
+    test.only("With `update:user:others` targeting `defaultUser`", async () => {
+      const privilegedUser = await orchestrator.createUser();
+
+      const activatedPrivilegedUser =
+        await orchestrator.activateUser(privilegedUser);
+
+      await orchestrator.addFeaturesToUser(activatedPrivilegedUser, [
+        "update:user:others",
+      ]);
+
+      const privilegedUserSession = await orchestrator.createSession(
+        activatedPrivilegedUser.id,
+      );
+
+      const defaultUser = await orchestrator.createUser();
+
+      const response = await fetch(
+        `http://localhost:3000/api/v1/users/${defaultUser.username}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Cookie: `session_id=${privilegedUserSession.token}`,
+          },
+          body: JSON.stringify({
+            username: "AlteradoPorPrivilegiado",
+          }),
+        },
+      );
+
+      expect(response.status).toBe(200);
+
+      const responseBody = await response.json();
+
+      expect(responseBody).toEqual({
+        name: "ForbiddenError",
+        message: "Você não possui permissão para atualizar outro usuário.",
+        action:
+          "Verifique se você possui a feature necessária para atualizar outro usuário.",
+        status_code: 403,
+      });
     });
   });
 });
