@@ -258,7 +258,7 @@ async function setFeatures(userId, featuresArray) {
   }
 }
 
-async function addFeaturesToUser(userId, features) {
+async function addFeatures(userId, features) {
   const updatedUser = await runUpdateQuery(userId, features);
 
   return updatedUser;
@@ -291,7 +291,7 @@ const user = {
   update,
   findOneByEmail,
   setFeatures,
-  addFeaturesToUser,
+  addFeatures,
 };
 
 export default user;

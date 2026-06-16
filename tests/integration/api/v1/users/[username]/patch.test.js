@@ -310,9 +310,8 @@ describe("PATCH /api/v1/users/[username]", () => {
   });
 
   describe("Privileged user", () => {
-    test.only("With `update:user:others` targeting `defaultUser`", async () => {
+    test("With `update:user:others` targeting `defaultUser`", async () => {
       const privilegedUser = await orchestrator.createUser();
-
       const activatedPrivilegedUser =
         await orchestrator.activateUser(privilegedUser);
 
@@ -345,12 +344,19 @@ describe("PATCH /api/v1/users/[username]", () => {
       const responseBody = await response.json();
 
       expect(responseBody).toEqual({
-        name: "ForbiddenError",
-        message: "Você não possui permissão para atualizar outro usuário.",
-        action:
-          "Verifique se você possui a feature necessária para atualizar outro usuário.",
-        status_code: 403,
+        id: defaultUser.id,
+        username: "AlteradoPorPrivilegiado",
+        email: defaultUser.email,
+        password: responseBody.password,
+        features: defaultUser.features,
+        created_at: responseBody.created_at,
+        updated_at: responseBody.updated_at,
       });
+
+      expect(uuidVersion(responseBody.id)).toBe(4);
+      expect(Date.parse(responseBody.created_at)).not.toBeNaN();
+      expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
+      expect(responseBody.updated_at > responseBody.created_at).toBe(true);
     });
   });
 });
